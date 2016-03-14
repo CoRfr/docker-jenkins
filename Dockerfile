@@ -55,13 +55,14 @@ ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
 # from a derived Dockerfile, can use `RUN plugins.sh active.txt` to setup /usr/share/jenkins/ref/plugins from a support bundle
 COPY plugins.sh /usr/local/bin/plugins.sh
 
+USER root
+
 # default to bash
 RUN ln -sf bash /bin/sh
 
 # docker
 ENV DOCKER_VERSION 1.9.1
 
-USER root
 RUN ( apt-get update && apt-get -y install git file )
 RUN ( cd /tmp && \
       wget -q -O /usr/bin/docker https://get.docker.com/builds/Linux/x86_64/docker-$DOCKER_VERSION && \

@@ -16,7 +16,7 @@ if [ -z "$JENKINS_UC_DOWNLOAD" ]; then
 fi
 
 get_plugin() {
-    curl -L ${JENKINS_UC_DOWNLOAD}/plugins/${plugin[0]}/${plugin[1]}/${plugin[0]}.hpi -o $REF/${plugin[0]}.jpi;
+    curl -sSL ${JENKINS_UC_DOWNLOAD}/plugins/${plugin[0]}/${plugin[1]}/${plugin[0]}.hpi -o $REF/${plugin[0]}.jpi;
     echo "=> $(ls -l $REF/${plugin[0]}.jpi)"
     if file $REF/${plugin[0]}.jpi | grep -v Zip; then
         echo "Failed to get jpi"
