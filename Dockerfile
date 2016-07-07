@@ -1,4 +1,4 @@
-FROM java:7-jre
+FROM java:7-jdk
 
 RUN apt-get update && apt-get install -y git curl zip && rm -rf /var/lib/apt/lists/*
 
