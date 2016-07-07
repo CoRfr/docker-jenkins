@@ -25,18 +25,19 @@ VOLUME /var/jenkins_home
 # or config file with your custom jenkins Docker image.
 RUN mkdir -p /usr/share/jenkins/ref/init.groovy.d
 
-ENV TINI_SHA 066ad710107dc7ee05d3aa6e4974f01dc98f3888
+ENV TINI_VERSION 0.9.0
+ENV TINI_SHA fa23d1e20732501c3bb8eeeca423c89ac80ed452
 
 # Use tini as subreaper in Docker container to adopt zombie processes 
-RUN curl -fsSL https://github.com/krallin/tini/releases/download/v0.5.0/tini-static -o /bin/tini && chmod +x /bin/tini \
+RUN curl -fsSL https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-static -o /bin/tini && chmod +x /bin/tini \
   && echo "$TINI_SHA  /bin/tini" | sha1sum -c -
 
 COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy
 
 ARG JENKINS_VERSION
-ENV JENKINS_VERSION ${JENKINS_VERSION:-1.651.2}
+ENV JENKINS_VERSION ${JENKINS_VERSION:-1.651.3}
 ARG JENKINS_SHA
-ENV JENKINS_SHA ${JENKINS_SHA:-f61b8b604acba5076a93dcde28c0be2561d17bde}
+ENV JENKINS_SHA ${JENKINS_SHA:-564e49fbd180d077a22a8c7bb5b8d4d58d2a18ce}
 
 
 # could use ADD but this one does not check Last-Modified header 
@@ -62,6 +63,7 @@ ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
 
 # from a derived Dockerfile, can use `RUN plugins.sh active.txt` to setup /usr/share/jenkins/ref/plugins from a support bundle
 COPY plugins.sh /usr/local/bin/plugins.sh
+COPY install-plugins.sh /usr/local/bin/install-plugins.sh
 
 USER root
 
