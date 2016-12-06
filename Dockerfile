@@ -76,7 +76,7 @@ USER root
 RUN ln -sf bash /bin/sh
 
 # docker
-ENV DOCKER_VERSION 1.9.1
+ENV DOCKER_VERSION 1.10.3
 
 RUN ( apt-get update && apt-get -y install git file )
 RUN ( cd /tmp && \
@@ -89,8 +89,17 @@ RUN chown root:docker /usr/bin/docker
 RUN usermod -a -G docker jenkins
 
 # encaps
-COPY encaps /usr/bin/encaps
-COPY encaps-cleanup /usr/bin/encaps-cleanup
+RUN ( \
+        cd /usr/bin && \
+        wget https://github.com/swi-infra/jenkins-docker-encaps/archive/master.zip && \
+        unzip master.zip && \
+        mv jenkins-docker-encaps-master/encaps* . && \
+        rm -rf master.zip jenkins-docker-encaps-master \
+    )
+
+# Expose tini so it can be used by encaps
+RUN mkdir -p /opt/tini && cp /bin/tini /opt/tini/
+VOLUME /opt/tini
 
 USER jenkins
 
