@@ -98,7 +98,7 @@ publish() {
                  --build-arg "JENKINS_SHA=$sha" \
                  --tag "jenkinsci/jenkins:${tag}" ${build_opts} .
 
-    if [ "$dry_run" = true ]; then
+    if [ ! "$dry_run" = true ]; then
         docker push "jenkinsci/jenkins:${tag}"
     fi
 }
@@ -155,7 +155,7 @@ publish-latest() {
 publish-lts() {
     local version=$1
     local variant=$2
-    tag-and-push "${version}" "lts${variant}"
+    tag-and-push "${version}${variant}" "lts${variant}"
 }
 
 # Process arguments
