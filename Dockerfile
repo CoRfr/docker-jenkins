@@ -78,12 +78,12 @@ USER root
 RUN ln -sf bash /bin/sh
 
 # docker
-ENV DOCKER_VERSION 1.10.3
+ENV DOCKER_VERSION 1.12.6
 
 RUN ( apt-get update && apt-get -y install git file )
 RUN ( cd /tmp && \
-      wget -q -O /usr/bin/docker https://get.docker.com/builds/Linux/x86_64/docker-$DOCKER_VERSION && \
-      chmod +x /usr/bin/docker )
+      curl -fsSLO https://get.docker.com/builds/Linux/x86_64/docker-$DOCKER_VERSION.tgz && \
+      tar --strip-components=1 -xvzf docker-$DOCKER_VERSION.tgz -C /usr/bin )
 
 # Provide docker group and make the executable accessible
 RUN groupadd -g 233 docker
